@@ -1,7 +1,8 @@
 # Source this file in bash.
 
 # Some paths used later.
-export SDK_PATH="$( cd "$(dirname "$0")" ; pwd -P )/sdk"
+export CURRENT_FILE="${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}"
+export SDK_PATH="$( cd "$(dirname "${CURRENT_FILE}")" ; pwd -P )/sdk"
 export OECORE_TARGET_SYSROOT="${SDK_PATH}/target_sysroot"
 export OECORE_NATIVE_SYSROOT="${SDK_PATH}/native_sysroot"
 
@@ -13,7 +14,7 @@ export CMAKE_INSTALL_PREFIX="${OECORE_TARGET_SYSROOT}/usr"
 
 # Where to find user-defined modules. Often not needed, since you can put your modules in
 # the default modules directory instead.
-export CMAKE_MODULE_PATH="${OECORE_NATIVE_SYSROOT}/usr/share/cmake-3/Modules"
+export CMAKE_MODULE_PATH="${OECORE_NATIVE_SYSROOT}/usr/share/cmake-3/Modules;${OECORE_TARGET_SYSROOT}/usr/share/cmake/myexports"
 
 # Pass variables to cmake.
 alias cmake='cmake -Werror=dev -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}'

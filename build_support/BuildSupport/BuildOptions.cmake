@@ -1,17 +1,16 @@
 #########################################################################################
-# Build Configurations
+# Build configurations. Modify to fit your needs.
+
+# Set build type to Release if not defined.
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+endif()
 
 # Supported build configurations, for easier selection and verification.
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Release" "Debug")
 
-# Set build type to Release if not defined.
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Release Debug" FORCE)
-endif()
-
-
 #########################################################################################
-# Build options for the configurations.
+# Build options for the configurations. Modify to fit your needs.
 
 # No extra flags for release builds. Use configuration from toolchain as is.
 set(CMAKE_CXX_FLAGS_RELEASE "" CACHE STRING "Flags used by the C++ compiler." FORCE)
@@ -23,7 +22,7 @@ set(CMAKE_C_FLAGS_DEBUG "-g -O0" CACHE STRING "Flags used by the C compiler." FO
 
 
 #########################################################################################
-# Validation
+# Validation of build configurations.
 
 function(internal_validate_build_types)
   get_property(supported_cmake_build_types CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS)

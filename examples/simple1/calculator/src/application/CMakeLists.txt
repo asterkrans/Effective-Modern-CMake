@@ -1,0 +1,12 @@
+
+add_executable(application_static)
+target_sources(application_static PRIVATE main.cpp)
+target_link_libraries(application_static PRIVATE mathutils_static)
+
+add_executable(application)
+target_sources(application PRIVATE main.cpp)
+target_link_libraries(application PRIVATE mathutils_shared)
+
+add_executable(application_headeronly)
+target_sources(application_headeronly PRIVATE main_headeronly.cpp)
+target_link_libraries(application_headeronly PRIVATE mathutils_headeronly)
