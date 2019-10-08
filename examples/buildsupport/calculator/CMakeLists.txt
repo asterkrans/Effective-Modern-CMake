@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.15)
-project(Calculator LANGUAGES CXX)
-
+cmake_minimum_required(VERSION 3.0)
 include(BuildSupport)
+
+project(Calculator LANGUAGES CXX)
 
 include(MathUtils)
 

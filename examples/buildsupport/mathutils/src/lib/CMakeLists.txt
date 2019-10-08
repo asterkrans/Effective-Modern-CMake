@@ -23,12 +23,9 @@ target_include_directories(mathutils_headeronly INTERFACE
         $<INSTALL_INTERFACE:include>
 )
 
-# Modify export directory as you like.
-install(EXPORT ${PROJECT_NAME} DESTINATION "share/cmake/myexports")
-
-install(TARGETS
-        mathutils_static
-        mathutils_shared
-        mathutils_object
-        mathutils_headeronly
-        EXPORT ${PROJECT_NAME})
+buildsupport_install_and_export(TARGETS
+                                mathutils_static
+                                mathutils_shared
+                                mathutils_object
+                                mathutils_headeronly
+                                )

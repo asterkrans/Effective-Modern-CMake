@@ -7,15 +7,23 @@
 # For example Yocto takes care of this in a build task.
 #
 
-set(buildsupport_stripdebuginfo_enabled TRUE)
-
-function(buildsupport_stripdebuginfo_configure target_name)
-  set(target_file "$<TARGET_FILE:${target_name}>")
-  add_custom_command(
-    TARGET ${target_name}
-    POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} --only-keep-debug ${target_file} ${target_file}.debug
-    COMMAND ${CMAKE_OBJCOPY} --strip-unneeded  ${target_file} ${target_file}
-    COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink=${target_file}.debug ${target_file}
-  )
-endfunction()
+if(buildsupport_internal_stripdebuginfo_enable)
+  function(buildsupport_internal_stripdebuginfo_configure target_name)
+    get_property(target_type TARGET ${target_name} PROPERTY TYPE)
+    if(target_type IN_LIST "STATIC_LIBRARY;SHARED_LIBRARY;EXECUTABLE")
+      set(target_file "$<TARGET_FILE:${target_name}>")
+      add_custom_command(
+        TARGET ${target_name}
+        POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} --only-keep-debug ${target_file} ${target_file}.debug
+        COMMAND ${CMAKE_OBJCOPY} --strip-unneeded  ${target_file} ${target_file}
+        COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink=${target_file}.debug ${target_file}
+      )
+    endif()
+  endfunction()
+  
+else()
+  # Functionallity not enabled.
+  function(buildsupport_stripdebuginfo_configure target_name)
+  endfunction()
+endif()
