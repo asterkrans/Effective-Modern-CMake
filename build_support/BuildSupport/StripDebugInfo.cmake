@@ -7,6 +7,8 @@
 # For example Yocto takes care of this in a build task.
 #
 
+# TODO: add_custom_target instead? Can be done in final_config? Eller risk att man gör extra strip genom att bygga strip-appl?
+
 if(buildsupport_internal_stripdebuginfo_enable)
   function(buildsupport_internal_stripdebuginfo_configure target_name)
     get_property(target_type TARGET ${target_name} PROPERTY TYPE)

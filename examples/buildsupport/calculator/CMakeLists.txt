@@ -3,8 +3,6 @@ include(BuildSupport)
 
 project(Calculator LANGUAGES CXX)
 
-include(MathUtils)
-
 add_subdirectory(src/application)
 
 buildsupport_perform_final_configuration()

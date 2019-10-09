@@ -16,9 +16,10 @@ if(buildsupport_internal_install_enable)
     cmake_parse_arguments(ARG "" "" "TARGETS" ${ARGN})
     
     # Modify export directory as you like.
-    install(EXPORT ${PROJECT_NAME} DESTINATION "share/cmake/myexports")
+    # Note: CMAKE_PROJECT_NAME is the name of the top level project, while PROJECT_NAME is the current subproject.
+    install(EXPORT ${CMAKE_PROJECT_NAME} DESTINATION "share/cmake/myexports")
   
     install(TARGETS ${ARG_TARGETS}
-            EXPORT ${PROJECT_NAME})
+            EXPORT ${CMAKE_PROJECT_NAME})
   endfunction()  
 endif()
