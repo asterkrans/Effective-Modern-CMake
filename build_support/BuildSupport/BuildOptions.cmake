@@ -25,7 +25,7 @@ set(CMAKE_C_FLAGS_DEBUG "-g -O0" CACHE STRING "Flags used by the C compiler.")
 # Validation
 
 # Validate build configurations.
-function(buildsupport_buildoptions_internal_validate_build_types)
+function(buildsupport_internal_buildoptions_validate_build_types)
   get_property(supported_cmake_build_types CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS)
   list(FIND supported_cmake_build_types ${CMAKE_BUILD_TYPE} is_valid_build_type)
   if(${is_valid_build_type} EQUAL -1)
@@ -33,7 +33,7 @@ function(buildsupport_buildoptions_internal_validate_build_types)
     message(FATAL_ERROR "Invalid CMAKE_BUILD_TYPE. Options are: ${supported_cmake_build_types_str}.")
   endif()
 endfunction()
-buildsupport_buildoptions_internal_validate_build_types()
+buildsupport_internal_buildoptions_validate_build_types()
 
 # Make sure project() was not called before buildsupport was included.
 # We want to be able to set default values to the CMAKE_XXX_FLAGS_YYYY above without needing to do FORCE.

@@ -3,7 +3,7 @@
 #include <mathutils.hpp>
 
 int main() {
-  assert(add(1, 2) == 3);
-  assert(sub(1, 2) == -1);
+  assert(mathutils::add(1, 2) == 3);
+  assert(mathutils::sub(1, 2) == -1);
   std::cout << "All tests pass." << std::endl;
 }

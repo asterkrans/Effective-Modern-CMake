@@ -14,4 +14,10 @@ if(buildsupport_internal_testing_enable)
       DEPENDS ${target_name}
     )
   endfunction()
+  
+  
+else()
+  # Functionallity not enabled.
+  function(buildsupport_internal_testing_configure target_name)
+  endfunction()
 endif()

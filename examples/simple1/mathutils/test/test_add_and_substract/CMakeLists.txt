@@ -1,11 +1,11 @@
 
-set(TARGETNAME test_add_and_substract)
+project(test_add_and_substract)
 
-add_executable(${TARGETNAME})
+add_executable(${PROJECT_NAME})
 
-target_sources(${TARGETNAME}
+target_sources(${PROJECT_NAME}
                PRIVATE test_add_and_substract.cpp)
                
-target_link_libraries(${TARGETNAME} PRIVATE mathutils_shared)
+target_link_libraries(${PROJECT_NAME} PRIVATE mathutils_shared)
 
-add_test(NAME test-${TARGETNAME} COMMAND ${TARGETNAME})
+add_test(NAME test-${PROJECT_NAME} COMMAND ${PROJECT_NAME})

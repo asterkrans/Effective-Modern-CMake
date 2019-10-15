@@ -17,5 +17,4 @@ target_link_libraries(${PROJECT_NAME}_headeronly PRIVATE mathutils_headeronly)
 install(TARGETS
         ${PROJECT_NAME}_static
         ${PROJECT_NAME}
-        ${PROJECT_NAME}_headeronly
-        EXPORT ${CMAKE_PROJECT_NAME})
+        ${PROJECT_NAME}_headeronly)

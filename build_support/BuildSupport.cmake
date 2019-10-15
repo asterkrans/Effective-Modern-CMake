@@ -13,11 +13,9 @@ include(BuildSupport/BuildOptions)
 #########################################################################################
 # Include optional features to use.
 # 
-# Features implements one or more of these functions:
+# Features implement this function:
 # - buildsupport_internal_xxxx_configure(target):
 #        Executed to configure target right after target was created
-# - buildsupport_internal_xxxx_final_configure():
-#        Executed to do configurations that need to be performed last in the configuration process.
 #
 # A variable buildsupport_internal_xxx_enable controls if feature is enabled.
 # If the target is not enabled, including and calling the configure functions should not do anything.
@@ -50,6 +48,7 @@ function(buildsupport_add_executable target_name)
   add_executable(${target_name} ${ARGN})
   buildsupport_internal_stripdebuginfo_configure(${target_name})
   buildsupport_add_run_target(${target_name})
+  buildsupport_internal_clangtidy_configure(${target_name})
   
   set_property(GLOBAL APPEND PROPERTY BUILDSUPPORT_APPLICATIONS "${target_name}")
 endfunction()
@@ -57,44 +56,17 @@ endfunction()
 function(buildsupport_add_library target_name)
   add_library(${target_name} ${ARGN})
   buildsupport_internal_stripdebuginfo_configure(${target_name})
+  buildsupport_internal_clangtidy_configure(${target_name})
   
   set_property(GLOBAL APPEND PROPERTY BUILDSUPPORT_LIBRARIES "${target_name}")
 endfunction()
 
-if(${buildsupport_internal_testing_enable})
-  function(buildsupport_add_test target_name)
-    add_executable(${target_name} ${ARGN})
-    buildsupport_internal_stripdebuginfo_configure(${target_name})
-    buildsupport_internal_testing_configure(${target_name})
-    
-    set_property(GLOBAL APPEND PROPERTY BUILDSUPPORT_TESTS "${target_name}")
-  endfunction()
+
+function(buildsupport_add_test target_name)
+  add_executable(${target_name} ${ARGN})
+  buildsupport_internal_stripdebuginfo_configure(${target_name})
+  buildsupport_internal_clangtidy_configure(${target_name})
+  buildsupport_internal_testing_configure(${target_name})
   
-else()
-  # Testing not enabled.
-  function(buildsupport_add_test target_name)
-  endfunction()
-endif()
-
-#########################################################################################
-# Should be executed last in your top CMakeLists.txt to perform some final configuration
-# when all targets have already been registered.
-function(buildsupport_perform_final_configuration)
-  # QualityAssurance:
-  # - Verify that all executables are installed.
-  # - Verify that all non-imported targets are listed in BUILDSUPPORT_*.
-  # TODO!!!
-
-
-
-  get_property(application_target_names GLOBAL PROPERTY BUILDSUPPORT_APPLICATIONS)
-  get_property(library_target_names GLOBAL PROPERTY BUILDSUPPORT_LIBRARIES)
-  get_property(test_target_names GLOBAL PROPERTY BUILDSUPPORT_TESTS)
-  
-  buildsupport_internal_clangtidy_final_configure()
-  
-  # Perform final configurations on each target.
-  foreach(target_name ${application_target_names} ${library_target_names} ${test_target_names})
-    
-  endforeach()
+  set_property(GLOBAL APPEND PROPERTY BUILDSUPPORT_TESTS "${target_name}")
 endfunction()

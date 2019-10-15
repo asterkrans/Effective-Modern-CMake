@@ -4,5 +4,3 @@ include(BuildSupport)
 project(Calculator LANGUAGES CXX)
 
 add_subdirectory(src/application)
-
-buildsupport_perform_final_configuration()

@@ -7,5 +7,5 @@ add_subdirectory(src/lib)
 add_subdirectory(test)
 
 
-install(EXPORT ${PROJECT_NAME} DESTINATION "share/cmake/myexports")
+install(EXPORT ${CMAKE_PROJECT_NAME} DESTINATION "share/cmake/myexports")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/" DESTINATION "include")

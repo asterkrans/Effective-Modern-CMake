@@ -13,3 +13,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE mathutils_shared)
 buildsupport_add_executable(${PROJECT_NAME}_headeronly)
 target_sources(${PROJECT_NAME}_headeronly PRIVATE main_headeronly.cpp)
 target_link_libraries(${PROJECT_NAME}_headeronly PRIVATE mathutils_headeronly)
+
+install(TARGETS
+        ${PROJECT_NAME}_static
+        ${PROJECT_NAME}
+        ${PROJECT_NAME}_headeronly)

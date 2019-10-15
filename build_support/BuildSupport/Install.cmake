@@ -10,7 +10,6 @@
 #
 
 if(buildsupport_internal_install_enable)
-  install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/" DESTINATION "include")
 
   function(buildsupport_install_and_export)
     cmake_parse_arguments(ARG "" "" "TARGETS" ${ARGN})
