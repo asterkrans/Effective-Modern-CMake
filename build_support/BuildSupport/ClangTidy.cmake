@@ -36,12 +36,20 @@ if(buildsupport_internal_clangtidy_enable)
                          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                          VERBATIM)
                          
-    add_custom_target(tidy
+      add_custom_target(tidy
                       DEPENDS ${CMAKE_BINARY_DIR}/clang-tidy/CMakeCache.txt
                       COMMAND make -j4 -C clang-tidy tidy
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                       VERBATIM)
       add_dependencies(tidy configure-tidy)
+      
+      
+      add_custom_target(tidy-apply-fixes
+                      DEPENDS ${CMAKE_BINARY_DIR}/clang-tidy/CMakeCache.txt
+                      COMMAND make -j4 -C clang-tidy tidy-apply-fixes
+                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                      VERBATIM)
+      add_dependencies(tidy-apply-fixes configure-tidy)
     endif()
     
     add_custom_target(tidy-${target_name}

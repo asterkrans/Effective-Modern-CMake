@@ -105,6 +105,10 @@ string(REPLACE " " ";" BUILDSUPPORT_COMPILER_BUILTIN_INCLUDES_LIST "${BUILDSUPPO
 add_custom_target(tidy-{name}
                   DEPENDS {exitcode_files})
 set_property(TARGET tidy-{name} PROPERTY INCLUDE_DIRECTORIES {include_directories})
+
+add_custom_target(internal-tidy-{name}-noprint
+                  DEPENDS {exitcode_files})
+set_property(TARGET tidy-{name} PROPERTY INCLUDE_DIRECTORIES {include_directories})
 """.format(name=target['name'],
            include_directories='"' + ';'.join(target['include_dirs']) + '"',
            exitcode_files=' '.join(exitcode_files)))
@@ -129,6 +133,8 @@ add_custom_command(TARGET tidy-{name}
 
 add_custom_command(OUTPUT {exitcode_file}
                    IMPLICIT_DEPENDS CXX {source}
+                   COMMAND ${{CMAKE_COMMAND}} -E remove -f {tidy_fixes_file}
+                   COMMAND touch {tidy_fixes_file}
                    COMMAND {tidy_command}
                    COMMENT "clang-tidy {source}"
                    VERBATIM)
@@ -137,22 +143,27 @@ add_custom_command(OUTPUT {exitcode_file}
            command_printer=os.path.join(scriptdir, 'command_printer.sh'),
            output_files_prefix=output_files_prefix,
            source=source,
+           tidy_fixes_file=tidy_fixes_file,
            tidy_command=tidy_command))
 
         # Generate a tidy target that runs tidy on everything.        
         all_targets = ' '.join(['tidy-' + target['name'] for target in targets])
-        all_fixes_files = ' '.join([(target['name'] + "-" + source).replace(os.path.sep, '-') + '.yaml' for source in target['sources'] for target in targets])
-                
+        all_targets_no_print = ' '.join(['internal-tidy-' + target['name'] + '-noprint' for target in targets])
+        all_fixes_files = [(t['name'] + "-" + src).replace(os.path.sep, '-') + '.yaml' for t in targets for src in t['sources']]
+        all_fixes_files = [os.path.join('${CMAKE_BINARY_DIR}', file) for file in all_fixes_files]
+        all_fixes_files = ' '.join(all_fixes_files)
+        
         outfile.write("""
 add_custom_target(tidy)
 add_dependencies(tidy {all_targets})
 
 add_custom_target(tidy-apply-fixes
+                  COMMAND ${{CMAKE_COMMAND}} -E remove_directory fixits/
                   COMMAND ${{CMAKE_COMMAND}} -E make_directory fixits/
                   COMMAND ${{CMAKE_COMMAND}} -E copy {all_fixes_files} fixits/
                   COMMAND clang-apply-replacements fixits/)
-add_dependencies(tidy-apply-fixes tidy)
-""".format(all_targets=all_targets, all_fixes_files=all_fixes_files))
+add_dependencies(tidy-apply-fixes {all_targets_no_print})
+""".format(all_targets=all_targets, all_targets_no_print=all_targets_no_print, all_fixes_files=all_fixes_files))
 
 
 
